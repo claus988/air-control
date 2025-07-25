@@ -1,0 +1,13 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make: Entering directory 'c:/Users/labin/Downloads/Template10_pwmmqtt_AIR CONTROL/Template10_pwmmqtt'
+(cd Applications/ && C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe V= -f Makefile all)
+ 
+make[1]: Entering directory 'c:/Users/labin/Downloads/Template10_pwmmqtt_AIR CONTROL/Template10_pwmmqtt/Applications'
+make[1]: Leaving directory 'c:/Users/labin/Downloads/Template10_pwmmqtt_AIR CONTROL/Template10_pwmmqtt/Applications'
+make: Leaving directory 'c:/Users/labin/Downloads/Template10_pwmmqtt_AIR CONTROL/Template10_pwmmqtt'
+ 
+make[1]: Makefile: No such file or directory
+make[1]: *** No rule to make target 'Makefile'.
+make[1]: Failed to remake makefile 'Makefile'.
+make: *** [Makefile:3: gccall] Error 2
+

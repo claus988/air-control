@@ -1,0 +1,24 @@
+2025-07-24 21:41:39,864 INFO     [FlashTop]    init
+2025-07-24 21:41:39,872 [Process-1048] INFO     [FlashTop]    do_main: cmd loadpara
+2025-07-24 21:41:39,873 [Process-1048] INFO     [Para]    exe path: C:\Users\labin\Downloads\Template10_pwmmqtt_AIR CONTROL\Template10_pwmmqtt\Debug
+2025-07-24 21:41:39,882 [Process-1048] INFO     [Para]    update digest file :C:\Users\labin\Downloads\Template10_pwmmqtt_AIR CONTROL\Template10_pwmmqtt\Debug\cfg.digest, digest:b'\x0b\x5f\xa4\xcb\x01\x02\xe5\x15\xb0\x88\xe2\x24\xfd\xf2\x8d\x8b\x1f\xc0\xd2\x13\xab\x59\x36\x4b\x74\x45\xdd\x9c\x2c\xae\x62\x5b' 
+2025-07-24 21:41:39,882 [Process-1048] INFO     [Para]    LoadPara from cfgfile(C:\Users\labin\Downloads\Template10_pwmmqtt_AIR CONTROL\Template10_pwmmqtt\Debug\htnb32l.ini) 
+2025-07-24 21:41:39,883 [Process-1048] WARNING  [Para]    Load para curdigest b'\x0b\x5f\xa4\xcb\x01\x02\xe5\x15\xb0\x88\xe2\x24\xfd\xf2\x8d\x8b\x1f\xc0\xd2\x13\xab\x59\x36\x4b\x74\x45\xdd\x9c\x2c\xae\x62\x5b'
+2025-07-24 21:41:39,884 [Process-1048] INFO     [FlashTop]    Load para sync success
+2025-07-24 21:41:39,884 [Process-1048] INFO     [FlashToolCLI]    Burnbatch Start, burn imglist ['bootloader', 'system'].
+2025-07-24 21:41:39,884 [Process-1048] INFO     [FlashTop]    do_main: cmd burnag, Thread0[12296]
+2025-07-24 21:41:39,884 [Process-1048] INFO     [Thread0]    ProcessStart[12296]
+2025-07-24 21:41:41,017 [Process-1048] INFO     [Thread0]    ResetBoard(Normal Mod) finish
+2025-07-24 21:41:41,024 [Process-1048] INFO     [Thread0]    args.ser.port :COM3
+2025-07-24 21:41:41,131 [Process-1048] INFO     [Image]    SetBaud 921600
+2025-07-24 21:41:41,133 [Process-1048] INFO     [Thread0]    TryDownload C:\Users\labin\Downloads\Template10_pwmmqtt_AIR CONTROL\Template10_pwmmqtt\Debug\agentboot.bin start
+2025-07-24 21:41:41,133 [Process-1048] INFO     [Thread0]    image size=28568, hdsize=272
+2025-07-24 21:41:41,133 [Process-1048] INFO     [Thread0]    Preamble Send
+2025-07-24 21:41:45,805 [Process-1048] ERROR    [Thread0]    Download->DLDIdleProcess failed, ImageId=0x54494d48, ret=0x70
+2025-07-24 21:41:45,806 [Process-1048] ERROR    [Thread0]    TryDownload failed(0x70)
+2025-07-24 21:41:45,806 [Process-1048] ERROR    [Thread0]    DownloadAgent failed(0x70)
+2025-07-24 21:41:45,806 [Process-1048] INFO     [Thread0]    LPCTryRecover not allow
+2025-07-24 21:41:45,812 [Process-1048] ERROR    [FlashTop]    burn failed, ret=0x00000070, Thread0[12296]
+2025-07-24 21:41:45,813 [Process-1048] INFO     [Thread0]    ProcessEnd[12296]
+2025-07-24 21:41:45,813 [Process-1048] ERROR    [FlashToolCLI]    
+[Error Info]:[preamble no response] 
