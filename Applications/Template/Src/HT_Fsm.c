@@ -12,8 +12,6 @@
 // #define LED_PAD_ID               16//13                 /**</ LED Pad ID. */
 // #define LED_PAD_ALT_FUNC         PAD_MuxAlt0        /**</ LED pin alternate function. */
 
-
-
 void HT_GPIO_InitLed(void) {
   GPIO_InitType GPIO_InitStruct = {0};
 
@@ -34,7 +32,7 @@ static const char BROKER_ADDR[]      = "131.255.82.115";
 static const char CLIENT_ID[]        = "HTNB32L/dcamSubscriber22";
 
 // Tópicos que vamos ouvir
-// static const char SUBSCRIBE_TOPIC_ESTADO[]      = "hana/externo/aircontrol/01/power";
+static const char SUBSCRIBE_TOPIC_ESTADO[]      = "hana/externo/aircontrol/01/power";
 static const char SUBSCRIBE_TOPIC_TEMPERATURA[] = "hana/externo/aircontrol/01/temperature";
 
 /* --- Variáveis de Controle e Handles --- */
@@ -107,14 +105,40 @@ static void OnMessageReceived_Dispatcher(MessageData *msg) {
     if (msg == NULL || msg->message == NULL || msg->message->payload == NULL) return;
 
     // Verifica se a mensagem é do tópico de ESTADO
-    // if (strncmp(msg->topicName->lenstring.data, SUBSCRIBE_TOPIC_ESTADO, msg->topicName->lenstring.len) == 0) {
+    if (strncmp(msg->topicName->lenstring.data, SUBSCRIBE_TOPIC_ESTADO, msg->topicName->lenstring.len) == 0) {
     //     // Envia o payload para a fila da tarefa de estado
-    //     uint8_t teste[100] = {0}; 
-    //     memcpy(teste,msg->message->payload,msg->message->payloadlen);
-    //     // printf("SUBSCRIBE_TOPIC_ESTADO: %s\n",teste);
-    //     osMessageQueuePut(estadoQueueHandle, teste, 0, 0);
-    //     memset(msg->message->payload,0,msg->message->payloadlen);
-    // } 
+        memcpy(teste,msg->message->payload,msg->message->payloadlen);
+         uint8_t testeestado[10] = {0}; 
+         int NUMERO = 0
+         if((strncmp(testeestado,"ON", sizeof("ON"))) == 0){
+            NUMERO = 1;
+            printf("chegou LIGAR\n");
+        }
+        if((strncmp(teste,"OFF", sizeof("OFF"))) == 0){
+            NUMERO = 2;
+            printf("chegou DESLIGAR\n");
+        }
+
+        switch (NUMERO)
+        {
+            case 1:
+             for(int i = 0; i <= 5; i++){
+                vPwmTask(LIGAR_24, sizeof(LIGAR_24) / sizeof(LIGAR_24[0]));	
+                printf("enviou %d\n", i);
+                vTaskDelay(pdMS_TO_TICKS(1000));
+             }
+            
+            break;
+
+            case 2:
+            for(int i = 0; i <= 5; i++){
+            vPwmTask(DESLIGAR_24, sizeof(DESLIGAR_24) / sizeof(DESLIGAR_24[0]));
+            printf("enviou %d\n", i);
+            vTaskDelay(pdMS_TO_TICKS(1000));
+            
+        }
+            break;
+ } 
     // Verifica se a mensagem é do tópico de TEMPERATURA
     else if (strncmp(msg->topicName->lenstring.data, SUBSCRIBE_TOPIC_TEMPERATURA, msg->topicName->lenstring.len) == 0) {
         // Envia o payload para a fila da tarefa de temperatura
@@ -124,7 +148,6 @@ static void OnMessageReceived_Dispatcher(MessageData *msg) {
         int numero = 0;
         // printf("SUBSCRIBE_TOPIC_ESTADO: %s\n",teste);
         // printf("SUBSCRIBE_TOPIC_TEMPERATURA: %s\n",msg->message->payload);
-        // osMessageQueuePut(temperaturaQueueHandle, msg->message->payload, 0, 0);
 
             if((strncmp(teste,"16", sizeof("16"))) == 0){
                 numero = 16;
