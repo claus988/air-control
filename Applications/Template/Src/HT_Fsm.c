@@ -6,12 +6,6 @@
 #include "HT_Fsm.h"
 #include "HT_PWM.h"
 
-//GPIO3 - LED
-// #define LED_INSTANCE             0                /**</ LED pin instance. */
-// #define LED_GPIO_PIN             6//2                  /**</ LED pin number. */
-// #define LED_PAD_ID               16//13                 /**</ LED Pad ID. */
-// #define LED_PAD_ALT_FUNC         PAD_MuxAlt0        /**</ LED pin alternate function. */
-
 void HT_GPIO_InitLed(void) {
   GPIO_InitType GPIO_InitStruct = {0};
 
@@ -48,10 +42,10 @@ static osMessageQueueId_t temperaturaQueueHandle;
 /* --- Protótipos de Funções --- */
 static void OnMessageReceived_Dispatcher(MessageData *msg);
 static void YieldTask(void *arg);
-// static void EstadoTask(void *arg);
+static void EstadoTask(void *arg);
 static void TemperaturaTask(void *arg);
 void vPwmTask(uint16_t buf[], unsigned int len);
-#define SIGNAL_LEN 197
+//#define SIGNAL_LEN 197
 
 
 // variaveis do pwm
@@ -107,7 +101,7 @@ static void OnMessageReceived_Dispatcher(MessageData *msg) {
     // Verifica se a mensagem é do tópico de ESTADO
     if (strncmp(msg->topicName->lenstring.data, SUBSCRIBE_TOPIC_ESTADO, msg->topicName->lenstring.len) == 0) {
     //     // Envia o payload para a fila da tarefa de estado
-        memcpy(teste,msg->message->payload,msg->message->payloadlen);
+        memcpy(testeestado,msg->message->payload,msg->message->payloadlen);
          uint8_t testeestado[10] = {0}; 
          int NUMERO = 0
          if((strncmp(testeestado,"ON", sizeof("ON"))) == 0){
@@ -370,7 +364,7 @@ static void OnMessageReceived_Dispatcher(MessageData *msg) {
         memset(msg->message->payload,0,msg->message->payloadlen);
     }
 }
-
+}
 
 /**
  * @brief A "Telefonista". Mantém a conexão viva em segundo plano.
@@ -392,25 +386,6 @@ static void YieldTask(void *arg) {
     }
 }
 
-/**
- * @brief Tarefa Especialista 1: Processa apenas mensagens de ESTADO.
- */
-// static void EstadoTask(void *arg) {
-//     char buffer_estado[64];
-
-//     while (1) {
-//         // A tarefa "dorme" aqui, esperando uma mensagem na sua fila específica
-//         if (osMessageQueueGet(estadoQueueHandle, buffer_estado, NULL, osWaitForever) == osOK) {
-//             printf(">>> [TAREFA DE ESTADO] Processando mensagem: %s\n", buffer_estado);
-//             // Aqui entraria a lógica para tratar o estado (ex: ligar/desligar algo)
-//             osDelay(pdMS_TO_TICKS(100));
-//         }
-//     }
-// }
-
-/**
- * @brief Tarefa Especialista 2: Processa apenas mensagens de TEMPERATURA.
- */
 
 
 void vPwmTask(uint16_t buf[], unsigned int len)
@@ -494,13 +469,13 @@ void HT_Fsm(void) {
         printf("ERRO FATAL: Nao foi possivel conectar ao Broker MQTT.\n");
          printf("Tentando novamente\n");
          osDelay(2000); // Espera 2 segundos para garantir que o log foi enviado.
-        // NVIC_SystemReset(); // Força uma reinicialização do sistema.
+        NVIC_SystemReset(); // Força uma reinicialização do sistema.
     }
     printf("Conectado ao Broker MQTT com sucesso!\n");
 
     // 2. Inscreve-se nos DOIS tópicos, usando a mesma função "Recepcionista"
     printf("Inscrevendo-se nos topicos...\n");
-    // MQTTSubscribe(&mqttClient, SUBSCRIBE_TOPIC_ESTADO, QOS0, OnMessageReceived_Dispatcher);
+    MQTTSubscribe(&mqttClient, SUBSCRIBE_TOPIC_ESTADO, QOS0, OnMessageReceived_Dispatcher);
     MQTTSubscribe(&mqttClient, SUBSCRIBE_TOPIC_TEMPERATURA, QOS0, OnMessageReceived_Dispatcher);
     printf("Inscricoes realizadas.\n\n");
 
@@ -514,19 +489,19 @@ void HT_Fsm(void) {
     task_attr.priority = osPriorityNormal;
     osThreadNew(YieldTask, NULL, &task_attr);
 
-    // // Tarefa Especialista de Estado
-    // memset(&task_attr, 0, sizeof(task_attr));
-    // task_attr.name = "EstadoTask";
-    // task_attr.stack_size = 2048;
-    // task_attr.priority = osPriorityNormal;
-    // osThreadNew(EstadoTask, NULL, &task_attr);
+    // Tarefa Especialista de Estado
+    memset(&task_attr, 0, sizeof(task_attr));
+    task_attr.name = "EstadoTask";
+    task_attr.stack_size = 2048;
+    task_attr.priority = osPriorityNormal;
+    osThreadNew(EstadoTask, NULL, &task_attr);
 
-    // Tarefa Especialista de Temperatura
-    // memset(&task_attr, 0, sizeof(task_attr));
-    // task_attr.name = "TemperaturaTask";
-    // task_attr.stack_size = 1024 * 5 * 2;
-    // task_attr.priority = osPriorityAboveNormal7;
-    // osThreadNew(TemperaturaTask, NULL, &task_attr);
+    Tarefa Especialista de Temperatura
+    memset(&task_attr, 0, sizeof(task_attr));
+    task_attr.name = "TemperaturaTask";
+    task_attr.stack_size = 1024 * 5 * 2;
+    task_attr.priority = osPriorityAboveNormal7;
+    osThreadNew(TemperaturaTask, NULL, &task_attr);
 
     printf("Sistema pronto. Todas as tarefas estao rodando em paralelo.\n");
     while (1)
